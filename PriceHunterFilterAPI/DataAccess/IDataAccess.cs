@@ -8,10 +8,10 @@ namespace PriceHunterFilterAPI.DataAccess
 {
     public interface IDataAccess
     {
-        Task<IEnumerable<T>> LoadData<T, U>(string query, 
+        Task<IEnumerable<T>> Read<T, U>(string query, 
                                             U parameters, 
                                             string connectionString = "Default");
-        Task SaveData<T>(string query,
+        Task Write<T>(string query,
                         T parameters,
                         string connectionString = "Default");
     }

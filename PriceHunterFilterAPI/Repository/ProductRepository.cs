@@ -14,6 +14,7 @@ namespace PriceHunterFilterAPI.Repository
 
         public ProductRepository(IDataAccess dataAccess)
         {
+            Console.WriteLine("We are in the Product Repo");
             _dataAccess = dataAccess;
         }
 
@@ -21,53 +22,39 @@ namespace PriceHunterFilterAPI.Repository
         /// Updates existing products or creates a new product
         /// </summary>
         /// <param name="product"> Product being upserted </param>
-        public void Upsert(Product product)
+        public async Task Upsert(Product product)
         {
-            if (!Exists(product.Id))
+            try
             {
-                CreateProduct(product);
-                return;
+                await _dataAccess.Write<Product>("UpsertProduct", product);
             }
-
-            if (hasPriceChanged(ref product))
-                UpdatePrice(product);
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
 
         /// <summary>
-        /// Check if a product ID is already present in the database
+        /// Update the price history of a product
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Product ID to be updated</param>
+        /// <param name="price">Current Price for the product</param>
+        /// <param name="currentDate">Todays date</param>
         /// <returns></returns>
-        private bool Exists(string id)
+        public async Task UpdatePrice(string id, decimal price)
         {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Creates a new database record
-        /// </summary>
-        /// <param name="product"> Product to be inserted </param>        
-        private void CreateProduct(Product product)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Checks if the price of an item has changed
-        /// </summary>
-        /// <param name="product"> item being evaluated </param>
-        private bool hasPriceChanged(ref Product product)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Updates the price of the object and creates an entry in the update table
-        /// </summary>
-        /// <param name="product">Product being updated</param>
-        private void UpdatePrice(Product product)
-        {
-            throw new NotImplementedException();
+            try
+            {
+                await _dataAccess.Write<dynamic>("UpdatePriceHistory", new
+                {
+                    NewPrice = price,
+                    ProductID = id
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
 
     }

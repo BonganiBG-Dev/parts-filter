@@ -16,24 +16,25 @@ namespace PriceHunterFilterAPI.DataAccess
         
         public SqlAccess(IConfiguration configuration)
         {
+            Console.WriteLine("We are in the SQL service");
             _configuration = configuration;
         }
 
-        public async Task<IEnumerable<T>> LoadData<T, U>(string query, U parameters, 
+        public async Task<IEnumerable<T>> Read<T, U>(string query, U parameters, 
             string connectionString = "Default")
         {
             using IDbConnection connection = new SqlConnection(
                 _configuration.GetConnectionString(connectionString));
 
-            return await connection.QueryAsync<T>(query, parameters, commandType: CommandType.Text);
+            return await connection.QueryAsync<T>(query, parameters, commandType: CommandType.StoredProcedure);
         }
 
-        public async Task SaveData<T>(string query, T parameters, string connectionString = "Default")
+        public async Task Write<T>(string query, T parameters, string connectionString = "Default")
         {
             using IDbConnection connection = new SqlConnection(
                 _configuration.GetConnectionString(connectionString));
 
-            await connection.ExecuteAsync(query, parameters, commandType: CommandType.Text);
+            await connection.ExecuteAsync(query, parameters, commandType: CommandType.StoredProcedure);
         }
     }
 }

@@ -4,6 +4,7 @@ namespace PriceHunterFilterAPI.Repository
 {
     public interface IProductRepository
     {
-        void Upsert(Product product);
+        Task UpdatePrice(string id, decimal price);
+        Task Upsert(Product product);
     }
 }
