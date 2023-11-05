@@ -16,6 +16,7 @@ namespace PriceHunterFilterAPI.DataAccess
         
         public SqlAccess(IConfiguration configuration)
         {
+            Console.WriteLine("We are in the SQL service");
             _configuration = configuration;
         }
 

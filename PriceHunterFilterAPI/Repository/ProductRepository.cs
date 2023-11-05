@@ -8,12 +8,13 @@ using System.Threading.Tasks;
 
 namespace PriceHunterFilterAPI.Repository
 {
-    public class ProductRepository
+    public class ProductRepository : IProductRepository
     {
         private readonly IDataAccess _dataAccess;
 
         public ProductRepository(IDataAccess dataAccess)
         {
+            Console.WriteLine("We are in the Product Repo");
             _dataAccess = dataAccess;
         }
 
@@ -32,7 +33,7 @@ namespace PriceHunterFilterAPI.Repository
                 Console.WriteLine(ex);
             }
         }
-        
+
         /// <summary>
         /// Update the price history of a product
         /// </summary>
@@ -44,10 +45,13 @@ namespace PriceHunterFilterAPI.Repository
         {
             try
             {
-                await _dataAccess.Write<dynamic>("UpdatePriceHistory", new { 
-                    NewPrice = price, ProductID = id });
+                await _dataAccess.Write<dynamic>("UpdatePriceHistory", new
+                {
+                    NewPrice = price,
+                    ProductID = id
+                });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex);
             }

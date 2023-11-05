@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 namespace PriceHunterFilter.Services
 {
     delegate void HandleProduct(string data);
-    internal class RabbitMqService
+    internal class RabbitMqService : IRabbitMqService
     {
         public RabbitMqService()
         {
-
+            Console.WriteLine("We are in the Rabbit Service");
         }
 
         public void Consume(HandleProduct handleProductDel)
@@ -41,7 +41,7 @@ namespace PriceHunterFilter.Services
             {
                 var body = args.Body.ToArray();
                 string product = Encoding.UTF8.GetString(body);
-                
+
                 handleProductDel(product);
                 channel.BasicAck(args.DeliveryTag, false);
             };

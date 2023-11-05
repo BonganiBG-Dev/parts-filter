@@ -37,3 +37,7 @@ BEGIN
 		INSERT INTO PriceHistory(ProductId, DateUpdated, Price) VALUES (@ProductID, GETDATE(), @NewPrice);
 	END
 END
+
+SELECT * FROM Product
+
+SELECT * from PriceHistory

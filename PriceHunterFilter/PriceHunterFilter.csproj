@@ -8,11 +8,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.HOsting" Version="7.0.0" />
     <PackageReference Include="RabbitMQ.Client" Version="6.6.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\PriceHunterFilterAPI\PriceHunterFilterAPI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

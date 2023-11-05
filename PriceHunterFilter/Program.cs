@@ -1,4 +1,10 @@
-﻿using PriceHunterFilter.Services;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using PriceHunterFilter.Controllers;
+using PriceHunterFilter.Services;
+using PriceHunterFilterAPI.DataAccess.Model;
+using PriceHunterFilterAPI.Filters;
+using PriceHunterFilterAPI.Repository;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
@@ -7,33 +13,16 @@ using System.Text.Json;
 namespace PriceHunterFilter
 {    
     internal class Program
-    {
+    {        
         static void Main(string[] args)
         {
-            RabbitMqService rabbitService = new RabbitMqService();
+            using IHost host = Startup.CreateHostBuilder(args).Build();
+            using var scope = host.Services.CreateScope();
+            var services = scope.ServiceProvider;
 
-            rabbitService.Consume((data) =>
-            {
-                Console.WriteLine(data);
-            });
-        }
 
-        private static bool TryDeserialize<T>(string jsonObject, out T dataObj)
-        {
-            bool assigned = false;
-
-            try
-            {
-                dataObj = JsonSerializer.Deserialize<T>(jsonObject);
-                assigned = true;
-            }
-            catch (Exception)
-            {
-                dataObj = default(T);
-                // Log the error
-            }
-
-            return assigned;
+            ProductController controller = new ProductController(services.GetService<IProductRepository>(), services.GetService<IRabbitMqService>());
+            controller.Start();
         }
     }
 }
